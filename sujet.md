@@ -147,7 +147,7 @@ C'est fait à l'exécution. Une routine de déchiffrement est chargée de modifi
 de reconstruire les instructions initiales. Cette routine sera injectée dans le binaire compressé/chiffré (mais elle-même ne sera
 pas compressée/chiffrée), et exécutée au lancement du programme ... En fait, cette routine représentera un payload que l'on
 injectera dans le binaire comme présenté dans la section précédente. La seule différence étant que ce payload influencera 
-la suite de l'exécution, puisqu'ik sera chargé de réécrire la section `CODE` du binaire.
+la suite de l'exécution, puisqu'il sera chargé de réécrire la section `CODE` du binaire.
 
 
 ### Résumé
