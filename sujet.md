@@ -31,11 +31,79 @@ La recherche documentaire est laissée à vos soins.
 #### L'entête
 
 Dans un premier temps, il faudra être capable de lire l'entête d'un fichier ELF 64. La documentation sur ce format est fournie 
-en annexe. 
+en annexe. Les champs à lire sont les suivants :
+
+```
+struct Elf64_Ehdr_s {
+    unsigned char   e_ident[EI_NIDENT];
+    Elf64_Half  e_type;
+    Elf64_Half  e_machine;
+    Elf64_Word  e_version;
+    Elf64_Addr  e_entry;
+    Elf64_Off   e_phoff;
+    Elf64_Off   e_shoff;
+    Elf64_Word  e_flags;
+    Elf64_Half  e_ehsize;
+    Elf64_Half  e_phentsize;
+    Elf64_Half  e_phnum;
+    Elf64_Half  e_shentsize;
+    Elf64_Half  e_shnum;
+    Elf64_Half  e_shstrndx;
+}; 
+```
 
 #### La table des sections
 
+Une fois l'entête lue, on connaît l'adresse de début des entêtes de section. Il faut donc reconstruire la table des sections, en lisant chaque entête de section :
+
+```
+struct Elf64_Shdr_s {
+    Elf64_Word sh_name;         /* Section name */
+    Elf64_Word sh_type;         /* Section type */
+    Elf64_Xword sh_flags;       /* Section attributes */
+    Elf64_Addr sh_addr;         /* Virtual address in memory */
+    Elf64_Off sh_offset;        /* Offset in file */
+    Elf64_Xword sh_size;        /* Size of section */
+    Elf64_Word sh_link;         /* Link to other section */
+    Elf64_Word sh_info;         /* Miscellaneous information */
+    Elf64_Xword sh_addralign;   /* Address alignment boundary */
+    Elf64_Xword sh_entsize;     /* Size of entries, if section has table */
+};
+```
+
 #### La table des segments
+
+Idem pour la table des segments :
+
+```
+struct Elf64_Phdr_s {
+    Elf64_Word p_type;          /* Type of segment */
+    Elf64_Word p_flags;         /* Segment attributes */
+    Elf64_Off p_offset;         /* Offset in file */
+    Elf64_Addr p_vaddr;         /* Virtual address in memory */
+    Elf64_Addr p_paddr;         /* Reserved */
+    Elf64_Xword p_filesz;       /* Size of segment in file */
+    Elf64_Xword p_memsz;        /* Size of segment in memory */
+    Elf64_Xword p_align;        /* Alignment of segment */
+};
+```
+
+#### La table des symboles
+
+Idem pour la table des symboles :
+
+```
+struct Elf64_Sym_s {
+    Elf64_Word st_name;         /* Symbol name */
+    unsigned char st_info;      /* Type and Binding attributes */
+    unsigned char st_other;     /* Reserved */
+    Elf64_Half st_shndx;        /* Section table index */
+    Elf64_Addr st_value;        /* Symbol value */
+    Elf64_Xword st_size;        /* Size of object (e.g., common) */
+};
+```
+
+
 
 #### L'affichage
 
@@ -143,7 +211,7 @@ Cette partie peut être écrite en C, prend en entrée un programme binaire et f
 
 ### Unpacking
 L'étape d'unpacking consiste à refabriquer le binaire original à partir de la version compressée/chiffrée. 
-C'est fait à l'exécution. Une routine de déchiffrement est chargée de modifier dynamiquement le contenu du binaire afin
+C'est fait au début de l'exécution dudit binaire compressé/chiffré. Une routine de déchiffrement est chargée de modifier dynamiquement son contenu afin
 de reconstruire les instructions initiales. Cette routine sera injectée dans le binaire compressé/chiffré (mais elle-même ne sera
 pas compressée/chiffrée), et exécutée au lancement du programme ... En fait, cette routine représentera un payload que l'on
 injectera dans le binaire comme présenté dans la section précédente. La seule différence étant que ce payload influencera 
