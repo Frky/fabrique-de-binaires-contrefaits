@@ -223,6 +223,22 @@ la suite de l'exécution, puisqu'il sera chargé de réécrire la section `CODE`
 [Binaire] --- (Packing) ---> [Binaire chiffré/compressé] --- (Malicious Binary Factory) ---> [Binaire chiffré/compressé + routine de déchiffrement] 
 ```
 
+## Format du rendu
+
+Comme décrit [ici](http://ensiwiki.ensimag.fr/index.php/4MMPCRYPTO_2016), le rendu attendu est sous la forme d'un article scientifique décrivant la démarche, les différentes
+étapes (problème/résolution) ainsi que les résultats obtenus. Vous pourrez par exemple développer les points suivants :
+
+* Généralité de l'approche (bien que l'implémentation soit spécifique à une architecture donnée)
+* Problèmes et enjeux liés aux binaires modifiés (imortance de la détection)
+* Diverses solutions pour ajouter du code dans un binaire
+* Analyse desdites solutions :
+    * Facilité de mise en oeuvre
+    * Efficacité (*ie* difficulté de détection)
+* Utilisation de ces méthodes pour implémenter un packer
+* Analyse des performances du packer :
+    * Faiblesses cryptographiques (récupération de la clef aisée ?)
+    * Efficacité de la compression
+    * Bypass d'analyseurs (type antivirus) ?
 
 ## Autres remarques
 
